@@ -1,5 +1,3 @@
-
-
 // REARABGE RANGES ON HOME
 
 var $homeRanges = $('#home-ranges .w-dyn-items');
@@ -44,20 +42,6 @@ $('input[name="Page URL"]').val(window.location.href);
 if (window.location.href.indexOf("/range/custom-carpets-by-belgotex") > -1) {
     window.location.href = "/custom-carpets";
 }
-
-// if div.search-result-item has a with href containing /range/custom-carpets-by-belgotex then remove this div
-// $('div.search-result-item').each(function () {
-//     if ($(this).find('a').attr('href').indexOf("/range/custom-carpets-by-belgotex") > -1) {
-//         $(this).remove();
-//     }
-// });
-
-// if any link has herf containing /range/custom-carpets-by-belgotex then forward to /custom-carpets
-// $('a').each(function () {
-//     if ($(this).attr('href').indexOf("/range/custom-carpets-by-belgotex") > -1) {
-//         $(this).attr('href', "/custom-carpets");
-//     }
-// });    
 
 // COOKIE FUNCTION - GLOBAL
 
@@ -142,21 +126,6 @@ $('#search-trigger').click(function () {
     }, 100);
 });
 
-// Show pricing for Westminster
-function showPricingForWestminster() {
-    if (currentUrl.includes("/all-products")) {
-        $('.filter-item').each(function () {
-            var $this = $(this);
-            if ($this.find('.filter-heading').text().trim() === 'Westminster') {
-                $this.find('.compare-price').removeClass('w-condition-invisible');
-            }
-        });
-    } else if (currentUrl.includes("/westminster")) {
-        $('#w-node-f81ec8e2-6160-c1b6-e368-a4bbdf836105-bfd5d4f1').removeClass('w-condition-invisible');
-    }
-}
-showPricingForWestminster();
-
 $(".swatch-link-block").click(function () {
 
     pathName = window.location.pathname; // Returns path only (/path/page)
@@ -239,33 +208,6 @@ if (window.location.href.indexOf("/range/") > -1) { // IF RANGE PAGE
     //$('.is-pay-later').css('display', 'none');
 }
 
-// IF ALL PRODUCTS PAGE
-
-if (window.location.href.indexOf("/all-products") > -1) {
-
-    // Add sector and solution to filter items
-
-    $('.filter-collection-item').each(function () {
-        if ($(this).find('[fs-cmsfilter-field="residential"]').text() === 'true') {
-            $(this).find('.filter-items').append('<div fs-cmsfilter-field="sector">Residential</div>');
-        }
-        if ($(this).find('[fs-cmsfilter-field="commercial"]').text() === 'true') {
-            $(this).find('.filter-items').append('<div fs-cmsfilter-field="sector">Commercial</div>');
-        }
-        if ($(this).find('[fs-cmsfilter-field="cto"]').text() === 'true') {
-            $(this).find('.filter-items').append('<div fs-cmsfilter-field="solution">Rug</div>');
-        }
-    });
-
-}
-
-// ALL PRODUCTS - LOOK FILTER TO ACT LIKE RADIO BUTTONS
-
-$('.filter-look-wrapper .checkbox-toggle').click(function () {
-    if ($(this).is(':checked')) {
-        $('.filter-look-wrapper .checkbox-toggle').not(this).prop('checked', false);
-    }
-});
 
 // RANGE COLOUR CARPET ROOM + ALPHA
 
@@ -342,36 +284,6 @@ $(".colour-swatch").on("click", function () {
 
 });
 
-// ALL PRODUCTS - SHOW OR HIDE FILTERED COLOURS
-
-function updateSwatchHexes() {
-
-    const activeColours = $('.colour-checkbox.fs-cmsfilter_active .checkbox-label-colour');
-    const swatchHexes = $('.swatch-hex');
-
-    if (activeColours.length > 0) {
-
-        swatchHexes.css('opacity', '0.1');
-
-        activeColours.each(function () {
-
-            const colourValue = $(this).text().trim();
-            swatchHexes.filter(function () {
-                return $(this).text().trim() === colourValue;
-            }).css('opacity', '1');
-
-        });
-    } else {
-        swatchHexes.css('opacity', '1');
-    }
-}
-
-$('[fs-cmsfilter-element="clear"], .colour-checkbox').on('click', function () {
-    setTimeout(updateSwatchHexes, 500);
-});
-
-updateSwatchHexes();
-
 // SORT COLOUR BY BRIGHTNESS
 
 const colorSwatches = document.querySelectorAll('.colour-swatch');
@@ -428,79 +340,6 @@ function rgbToHsl(r, g, b) {
     }
     return [h, s, l];
 }
-
-// FILTER COLOURS
-
-let colors = ['#bfbf30', '#b28659', '#80191b', '#6b998a', '#336680', '#ffffff', '#808080', '#000000'];
-let swatchDivs = document.querySelectorAll('.swatch-hex');
-
-swatchDivs.forEach(div => {
-
-    // Get the hex color value of the div
-    const divColor = div.style.backgroundColor;
-
-    // Calculate the closest color from the colors array
-    let closestColor = '';
-    let closestColorDistance = Infinity;
-    colors.forEach(color => {
-        const distance = getColorDistance(divColor, color);
-        if (distance < closestColorDistance) {
-            closestColor = color;
-            closestColorDistance = distance;
-        }
-    });
-
-    // Set the new attribute with the closest color and then the text of the div
-    div.setAttribute('fs-cmsfilter-field', 'colour');
-
-    // div innerHTML is the text of the div but preserve the img already there
-    div.innerHTML = div.innerHTML + closestColor.substring(1);
-    div.style.color = divColor;
-    div.style.fontSize = '0px';
-
-});
-
-// Helper function to calculate the distance between two colors
-function getColorDistance(color1, color2) {
-    const color1RGB = hexToRGB(color1);
-    const color2RGB = hexToRGB(color2);
-    const rDiff = color1RGB[0] - color2RGB[0];
-    const gDiff = color1RGB[1] - color2RGB[1];
-    const bDiff = color1RGB[2] - color2RGB[2];
-    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
-}
-
-// Helper function to convert a hex color to RGB
-function hexToRGB(color) {
-    if (/^#[0-9A-F]{6}$/i.test(color)) {
-        // Hex color code
-        const r = parseInt(color.substring(1, 3), 16);
-        const g = parseInt(color.substring(3, 5), 16);
-        const b = parseInt(color.substring(5, 7), 16);
-        return [r, g, b];
-    } else if (/^rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)$/i.test(color)) {
-        // RGB color code
-        const match = color.match(/^rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)$/i);
-        const r = parseInt(match[1]);
-        const g = parseInt(match[2]);
-        const b = parseInt(match[3]);
-        return [r, g, b];
-    } else {
-        return [0, 0, 0]; // Invalid color, return black
-    }
-}
-
-// FILTER COPY SWATCHES TO MODAL
-
-setTimeout(function () {
-    $('.filter-collection-item').each(function () {
-        const rangeSwatch = $(this).find('.collection-list-swatch').clone();
-        const rangeModal = $(this).find('.filter-swatches-modal');
-        // $(rangeSwatch).find('.swatch-hex').css('opacity', '1');
-        $(rangeSwatch).find('.collection-item-swatch').css('width', '30px');
-        rangeSwatch.appendTo(rangeModal);
-    });
-}, 2000);
 
 // RANGE GALLERY + SWATCH ZOOM
 
@@ -612,7 +451,7 @@ function setHeaderHeight() {
 window.addEventListener('load', setHeaderHeight);
 window.addEventListener('resize', setHeaderHeight);
 
-// RANGE TOOGLE WALL-TO-WALL and RUG ROOMS
+// RANGE TOGGLE WALL-TO-WALL and RUG ROOMS
 
 $('.form-radio-label').each(function () {
     const labelText = $(this).text().trim();
@@ -667,38 +506,6 @@ swatches.click(function () {
 });
 
 activeSwatch.click(); // Trigger the click event for the last swatch.
-
-// ALL PRODUCTS GENERAL
-
-// Show or hide Rug image for Broadloom products
-$('#filterForm').click(function () {
-    setTimeout(function () {
-        if ($('#rug-checkbox-wrapper').hasClass('fs-cmsfilter_active')) {
-            $('.filter-img-rug').removeClass('hide');
-        } else {
-            $('.filter-img-rug').addClass('hide');
-        }
-    }, 500);
-});
-
-$('#clearFilter1, #clearFilter2').click(function () {
-    $('.filter-img-rug').addClass('hide');
-    //console.log('#clearFilter1,2 clicked');
-});
-
-// if url contains 'solution=Rug' then remove .hide from .filter-img-rug
-if (window.location.href.indexOf('solution=Rug') > -1) {
-    $('.filter-img-rug').removeClass('hide');
-}
-
-// if anchor tag contains 'miraclerug' then remove child with class 'collection-list-swatch'
-setTimeout(function () {
-    $('.filter-range-link').each(function () {
-        if ($(this).attr('href').indexOf('miraclerug') > -1) {
-            $(this).find('.collection-list-swatch').remove();
-        }
-    });
-}, 4000);
 
 // trigger get quote button in nav bar
 $('.get-quote').click(function () {
