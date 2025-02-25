@@ -8,7 +8,7 @@ $(document).ready(function () {
         applyFilterStyles();
         setupObservers();
         addFilterMapping();
-        setupLookFilterRadio();
+        // setupLookFilterRadio();
         setupSwatchUpdates();
         setupSwatchFiltering();
         copySwatchesToModal();
@@ -25,7 +25,6 @@ function applyFilterStyles() {
             const $this = $(this);
             $this.find('.checkbox_toggle-dot').css('transform', 'translateX(15px)');
             $this.find('.checkbox_toggle-mask').css('background', '#3cb300');
-            console.log('Filter styles applied');
         });
         $('.checkbox_toggle').not('.fs-cmsfilter_active').each(function () {
             const $this = $(this);
@@ -59,7 +58,6 @@ function addFilterMapping() {
             }
         });
     });
-    console.log('Filter mapping applied');
 }
 
 // Make Look filter acts like radio buttons
