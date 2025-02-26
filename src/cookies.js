@@ -2,6 +2,7 @@ const cookieBanner = document.getElementById("cookie-banner");
 const customiseBtn = document.getElementById("customise-cookies");
 const saveBtn = document.getElementById("save-cookies");
 const acceptAllBtn = document.getElementById("accept-all-cookies");
+const acceptAllBtn2 = document.getElementById("accept-all-cookies-2");
 const formWrap = document.querySelector(".cookie-form-wrap");
 const saveWrap = document.querySelector(".cookie-save-wrap");
 const buttonWrap = document.querySelector(".cookie-button-wrap");
@@ -94,6 +95,7 @@ function showCustomisation() {
 customiseBtn.addEventListener("click", showCustomisation);
 saveBtn.addEventListener("click", savePreferences);
 acceptAllBtn.addEventListener("click", acceptAllCookies);
+acceptAllBtn2.addEventListener("click", acceptAllCookies);
 
 // Run Consent Check on Page Load
 checkConsent();
