@@ -61,13 +61,13 @@ function addFilterMapping() {
 }
 
 // Make Look filter acts like radio buttons
-function setupLookFilterRadio() {
-    $('.filter-look-wrapper .checkbox-toggle').on('click', function () {
-        if ($(this).is(':checked')) {
-            $('.filter-look-wrapper .checkbox-toggle').not(this).prop('checked', false);
-        }
-    });
-}
+// function setupLookFilterRadio() {
+//     $('.filter-look-wrapper .checkbox-toggle').on('click', function () {
+//         if ($(this).is(':checked')) {
+//             $('.filter-look-wrapper .checkbox-toggle').not(this).prop('checked', false);
+//         }
+//     });
+// }
 
 // Update swatch hexes opacity
 function setupSwatchUpdates() {

@@ -1,8 +1,16 @@
 var texturedURL = ['chevron', 'cubed', 'mesh', 'relic', 'scales', 'swirl', 'tulle'];
 var thePrice = $('#cto-price').text();
-var overlocking = 30;
-var fabricTrim = 130; // for Timbavati
+var overlocking = 35;
+var fabricTrim = 155; // for Timbavati
 var addDiscount = false;
+
+var markUp = 1.8;
+for (var i = 0; i < texturedURL.length; i++) {
+    if (window.location.href.indexOf(texturedURL[i]) > -1) {
+        markUp = 2;
+        break;
+    }
+}
 
 var chooseSize;
 var theRange;
@@ -142,6 +150,7 @@ $(function () {
             if (window.location.href.indexOf(texturedURL[i]) > -1) {
                 mWidth = shortSide;
                 mLength = longSide;
+				
                 break;
             }
         }
@@ -160,19 +169,19 @@ $(function () {
         // New Shipping
 
         if (shortSide <= 1.2) {
-            shippingCost = 217.39;
+            shippingCost = 326.09;
         } else if (shortSide <= 1.6) {  
-            shippingCost = 304.35;
+            shippingCost = 434.78;
         } else if (shortSide <= 2) {
-            shippingCost = 391.30;
+            shippingCost = 543.48;
         } else if (shortSide <= 3) {
-            shippingCost = 478.26;
+            shippingCost = 652.17;
         } else {
-            shippingCost = 565.22;
+            shippingCost = 817.39;
         }
 
 		var cutCost = required_area * thePrice;
-		var carpetCost = area_m2 * thePrice * 2;
+		var carpetCost = area_m2 * thePrice * markUp;
 		let perimeterLength = (shortSide * 2) + (longSide * 2);
 		let edgingCost = theRange === 'Timbavati' ? perimeterLength * fabricTrim : perimeterLength * overlocking;
 		var handelingCost = 300;
@@ -182,7 +191,7 @@ $(function () {
 
 		// Calculate final price
 
-		var vatRound = vatTotal.toFixed(0);
+		var vatRound = Math.ceil(vatTotal);
 		var vatComma = vatRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 		$("#purchasePrice").text(vatComma);
