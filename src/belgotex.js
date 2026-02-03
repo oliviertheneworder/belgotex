@@ -244,7 +244,7 @@ $(".colour-swatch").on("click", function () {
 
     var colour = $this.css("background-color");
     var colourName = $this.find(".colour-name").text();
-    colourName = colourName.replace('Lite', '').replace('Ultra', '');
+    //colourName = colourName.replace('Lite', '').replace('Ultra', '');
 
     $('.hero-colour-tint, .colour-swatch-confirmation').css("background-color", colour);
     $('.colour-name-confirmation, .hero-colour-name, #colourName').text(colourName);

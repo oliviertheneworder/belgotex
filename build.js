@@ -9,7 +9,7 @@ async function build() {
         bundle: true,
         outfile: './dist/index.js', // Output file
         minify: true, // Optional: Minify for production
-        sourcemap: false // Optional: Generate sourcemaps
+        sourcemap: true // Optional: Generate sourcemaps
     });
 
     if (isWatch) {
