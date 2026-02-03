@@ -41,7 +41,10 @@
                                     const colour = parent.document.querySelector('#inputColour').value;
                                     const price = parent.document.querySelector('#purchasePrice').innerHTML;
                                     const name = parent.document.querySelector('#productCapture').innerText;
-                                    const trim = `Overlocked Edge`;
+                                    
+                                    // Check if it's Sensology Lush range - if so, don't use Overlocked Edge
+                                    const isSensologyLush = name && name.toLowerCase().includes('sensology') && name.toLowerCase().includes('lush');
+                                    const trim = isSensologyLush ? `No Edge Treatment` : `Overlocked Edge`;
                                     let swatch = '';
                                     let swatch_list = $(parent.document.querySelectorAll('.preview-swatch-item'));
 

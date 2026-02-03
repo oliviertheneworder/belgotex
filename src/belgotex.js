@@ -113,10 +113,22 @@ var viewAsRug = false;
 $('#range-buy-rug').click(function () {
     viewAsRug = true;
     $('.colour-swatch.active').trigger("click");
+    // Hide overlocked edge for Sensology Lush when rug builder is activated
+    if (typeof hideOverlockedEdgeForSensologyLush === 'function') {
+        setTimeout(function() {
+            hideOverlockedEdgeForSensologyLush();
+        }, 200);
+    }
 });
 $('#close-buy-rug').click(function () {
     viewAsRug = false;
     $('.colour-swatch.active').trigger("click");
+    // Show overlocked edge again when rug builder is closed
+    if (typeof hideOverlockedEdgeForSensologyLush === 'function') {
+        setTimeout(function() {
+            hideOverlockedEdgeForSensologyLush();
+        }, 200);
+    }
 });
 
 // if #search-trigger is clicked add focus to #search input inside the modal
@@ -486,6 +498,95 @@ $('#range-buy-rug, #close-buy-rug').click(function () {
     $('.switch-on-rug')[0].click();
 });
 
+// Hide overlocked edge section for Sensology Lush range when rug builder is active
+function hideOverlockedEdgeForSensologyLush() {
+    // Check if we're on a range page
+    if (window.location.href.indexOf("/range/") === -1) {
+        return;
+    }
+    
+    // Get range name from URL
+    var rangeName = window.location.href.includes("/range/") 
+        ? window.location.href.split("/range/")[1].split(/[#?]/)[0] 
+        : "";
+    rangeName = rangeName.replace(/-/g, ' ').toLowerCase();
+    
+    // Check if it's Sensology Lush range
+    var isSensologyLush = rangeName.includes('sensology') && rangeName.includes('lush');
+    
+    // Check if rug builder is active (viewAsRug is true or #range-controls is in URL)
+    var isRugBuilderActive = viewAsRug || window.location.href.indexOf('#range-controls') > -1;
+    
+    if (isSensologyLush && isRugBuilderActive) {
+        // Look for elements containing "overlocked" or "overlock" text
+        // Target common container elements that might contain the edge option
+        $('div, section, form, fieldset, label, p, li, span').each(function() {
+            var $element = $(this);
+            var text = $element.text().toLowerCase().trim();
+            
+            // Skip if already processed or if it's a parent of an already hidden element
+            if ($element.data('overlocked-processed') || $element.closest('[data-overlocked-hidden]').length > 0) {
+                return;
+            }
+            
+            // Check if this element contains "overlocked" or "overlock" text
+            if (text.includes('overlocked') || text.includes('overlock')) {
+                // Find the closest parent container that's likely the section/option container
+                var $container = $element.closest('div[class*="option"], div[class*="edge"], div[class*="trim"], fieldset, form, section');
+                
+                // If no specific container found, use the element itself if it's substantial
+                if ($container.length === 0 || $container.is('body') || $container.is('html')) {
+                    $container = $element;
+                }
+                
+                // Only hide if it's a meaningful container (not too small)
+                if ($container.length > 0 && !$container.is('body') && !$container.is('html')) {
+                    // Store original display state
+                    var originalDisplay = $container.css('display');
+                    if (originalDisplay !== 'none') {
+                        $container.data('overlocked-original-display', originalDisplay);
+                    }
+                    $container.hide().attr('data-overlocked-hidden', 'true');
+                    $container.data('overlocked-processed', true);
+                }
+            }
+        });
+    } else {
+        // Show the overlocked edge section if conditions are not met
+        $('[data-overlocked-hidden]').each(function() {
+            var $element = $(this);
+            var originalDisplay = $element.data('overlocked-original-display') || 'block';
+            $element.css('display', originalDisplay).removeAttr('data-overlocked-hidden').removeData('overlocked-processed').removeData('overlocked-original-display');
+        });
+    }
+}
+
+// Call on page load and when rug builder is toggled
+if (window.location.href.indexOf("/range/") > -1) {
+    // Initial check after DOM is ready
+    $(document).ready(function() {
+        setTimeout(function() {
+            hideOverlockedEdgeForSensologyLush();
+        }, 500);
+    });
+    
+    // Check when wall-to-wall is toggled (to show it again)
+    $('#range-wall-to-wall').on('click', function() {
+        setTimeout(function() {
+            hideOverlockedEdgeForSensologyLush();
+        }, 200);
+    });
+    
+    // Also check when viewAsRug changes (safety net)
+    var originalViewAsRug = viewAsRug;
+    setInterval(function() {
+        if (viewAsRug !== originalViewAsRug) {
+            originalViewAsRug = viewAsRug;
+            hideOverlockedEdgeForSensologyLush();
+        }
+    }, 100);
+}
+
 // RANGE DEFAULT COLOUR SWATCH AND IS ACTIVE CONTROL
 
 const swatches = $('.colour-swatch');
@@ -544,5 +645,7 @@ if (window.location.href.indexOf('#range-controls') > -1) {
         $('.buy-rug')[0].click();
         $('.colour-swatch.active').trigger("click");
         // Remove '#range-controls' from URL
+        // Also check for Sensology Lush overlocked edge hiding
+        hideOverlockedEdgeForSensologyLush();
     }, 1000);
 }

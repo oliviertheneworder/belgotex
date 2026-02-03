@@ -74,6 +74,11 @@ $(function () {
 	if (theRange === 'Timbavati') {
 		$('#cto-note').html("Delivered to your door with a 60mm fabric trim edge.<br>No installation required.");
 	}
+	
+	// Sensology Lush - cannot be overlocked, so remove overlocked edge text
+	if (theRange === 'Sensology Lush') {
+		$('#cto-note').html("Delivered to your door.<br>No installation required.");
+	}
 
 	$("select#inputColour").change(function () {
 
